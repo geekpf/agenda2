@@ -42,7 +42,7 @@ const ProfessionalSelection: React.FC<ProfessionalSelectionProps> = ({ bookingDa
                                 : 'border-slate-300 bg-white hover:border-slate-500'
                         }`}
                     >
-                         <img src={`https://i.pravatar.cc/150?u=${prof.id}`} alt={prof.name} className="h-12 w-12 rounded-full"/>
+                         <img src={prof.photoUrl || `https://ui-avatars.com/api/?name=${prof.name.split(' ').join('+')}&background=ecfdf5&color=166534`} alt={prof.name} className="h-12 w-12 rounded-full object-cover bg-slate-100"/>
                          <span className="font-semibold text-slate-700">{prof.name}</span>
                     </div>
                 )) : (

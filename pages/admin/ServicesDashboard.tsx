@@ -12,6 +12,20 @@ const ServiceModal: React.FC<{
     const [name, setName] = useState(service?.name || '');
     const [price, setPrice] = useState(service?.price || 0);
     const [duration, setDuration] = useState(service?.duration || 30);
+    const [pixKey, setPixKey] = useState(service?.pixKey || '');
+    const [pixQrCode, setPixQrCode] = useState<string | undefined>(service?.pixQrCode);
+
+
+    const handleQrCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                setPixQrCode(event.target?.result as string);
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    };
+
 
     const handleSave = () => {
         if (name.trim() && price > 0 && duration > 0) {
@@ -19,7 +33,9 @@ const ServiceModal: React.FC<{
                 id: service?.id || '',
                 name,
                 price,
-                duration
+                duration,
+                pixKey,
+                pixQrCode
             });
         }
     };
@@ -40,6 +56,17 @@ const ServiceModal: React.FC<{
                     <div>
                         <label htmlFor="service-duration" className="block text-sm font-medium text-slate-700">Duração (minutos)</label>
                         <input type="number" id="service-duration" value={duration} onChange={e => setDuration(Number(e.target.value))} step="5" className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-slate-500 focus:border-slate-500"/>
+                    </div>
+                    <div>
+                        <label htmlFor="service-pix-key" className="block text-sm font-medium text-slate-700">Chave PIX</label>
+                        <input type="text" id="service-pix-key" value={pixKey} onChange={e => setPixKey(e.target.value)} placeholder="Email, CPF, Telefone, etc." className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-slate-500 focus:border-slate-500"/>
+                    </div>
+                    <div>
+                        <label htmlFor="service-pix-qr" className="block text-sm font-medium text-slate-700">QR Code PIX (Imagem)</label>
+                        <div className="mt-1 flex items-center space-x-4">
+                            {pixQrCode && <img src={pixQrCode} alt="QR Code Preview" className="h-16 w-16 object-contain border p-1 rounded-md bg-white" />}
+                            <input type="file" id="service-pix-qr" accept="image/*" onChange={handleQrCodeChange} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200"/>
+                        </div>
                     </div>
                 </div>
                 <div className="mt-6 flex justify-end space-x-3">

@@ -4,12 +4,15 @@ export interface Service {
   name: string;
   price: number;
   duration: number; // in minutes
+  pixKey?: string;
+  pixQrCode?: string; // base64 image data
 }
 
 export interface Professional {
   id: string;
   name: string;
   services: string[]; // array of service IDs
+  photoUrl?: string; // base64 image data
 }
 
 export enum AppointmentStatus {

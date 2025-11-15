@@ -12,11 +12,22 @@ const ProfessionalModal: React.FC<{
 }> = ({ professional, onClose, onSave, allServices }) => {
     const [name, setName] = useState(professional?.name || '');
     const [selectedServices, setSelectedServices] = useState<string[]>(professional?.services || []);
+    const [photoUrl, setPhotoUrl] = useState<string | undefined>(professional?.photoUrl);
 
     const handleServiceToggle = (serviceId: string) => {
         setSelectedServices(prev => 
             prev.includes(serviceId) ? prev.filter(id => id !== serviceId) : [...prev, serviceId]
         );
+    };
+    
+    const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                setPhotoUrl(event.target?.result as string);
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
     };
 
     const handleSave = () => {
@@ -25,6 +36,7 @@ const ProfessionalModal: React.FC<{
                 id: professional?.id || '',
                 name,
                 services: selectedServices,
+                photoUrl,
             });
         }
     };
@@ -34,6 +46,13 @@ const ProfessionalModal: React.FC<{
             <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
                 <h2 className="text-2xl font-bold mb-4">{professional ? 'Editar' : 'Adicionar'} Profissional</h2>
                 <div className="space-y-4">
+                     <div>
+                        <label className="block text-sm font-medium text-slate-700">Foto</label>
+                        <div className="mt-1 flex items-center space-x-4">
+                            <img src={photoUrl || `https://ui-avatars.com/api/?name=${name.split(' ').join('+')}&background=ecfdf5&color=166534`} alt="Avatar" className="h-16 w-16 rounded-full object-cover bg-slate-200" />
+                            <input type="file" accept="image/*" onChange={handlePhotoChange} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200"/>
+                        </div>
+                    </div>
                     <div>
                         <label htmlFor="prof-name" className="block text-sm font-medium text-slate-700">Nome</label>
                         <input type="text" id="prof-name" value={name} onChange={e => setName(e.target.value)} className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-slate-500 focus:border-slate-500"/>
@@ -109,9 +128,12 @@ const ProfessionalsDashboard: React.FC = () => {
                 <ul className="divide-y divide-slate-200">
                     {professionals.map(prof => (
                         <li key={prof.id} className="p-4 flex justify-between items-center hover:bg-slate-50">
-                            <div>
-                                <p className="text-lg font-medium text-slate-900">{prof.name}</p>
-                                <p className="text-sm text-slate-500">{getServiceNames(prof.services) || 'Nenhum serviço associado'}</p>
+                            <div className="flex items-center space-x-4">
+                               <img src={prof.photoUrl || `https://ui-avatars.com/api/?name=${prof.name.split(' ').join('+')}&background=ecfdf5&color=166534`} alt={prof.name} className="h-12 w-12 rounded-full object-cover bg-slate-100"/>
+                                <div>
+                                    <p className="text-lg font-medium text-slate-900">{prof.name}</p>
+                                    <p className="text-sm text-slate-500">{getServiceNames(prof.services) || 'Nenhum serviço associado'}</p>
+                                </div>
                             </div>
                             <div className="flex items-center space-x-2">
                                 <button onClick={() => handleEdit(prof)} className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-200 rounded-full"><PencilIcon className="h-5 w-5"/></button>

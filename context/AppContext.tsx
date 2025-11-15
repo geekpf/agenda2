@@ -5,17 +5,17 @@ import { DAYS_OF_WEEK, TIME_SLOTS } from '../constants';
 
 // --- INITIAL DATA ---
 const initialServices: Service[] = [
-    { id: '1', name: 'Corte de Cabelo', price: 50, duration: 30 },
-    { id: '2', name: 'Manicure', price: 30, duration: 45 },
-    { id: '3', name: 'Pedicure', price: 40, duration: 45 },
-    { id: '4', name: 'Barba', price: 35, duration: 30 },
-    { id: '5', name: 'Design de Sobrancelha', price: 25, duration: 20 },
+    { id: '1', name: 'Corte de Cabelo', price: 50, duration: 30, pixKey: 'email@exemplo.com', pixQrCode: '' },
+    { id: '2', name: 'Manicure', price: 30, duration: 45, pixKey: '123.456.789-00', pixQrCode: '' },
+    { id: '3', name: 'Pedicure', price: 40, duration: 45, pixKey: '(11) 99999-9999', pixQrCode: '' },
+    { id: '4', name: 'Barba', price: 35, duration: 30, pixKey: 'chave-aleatoria-123', pixQrCode: '' },
+    { id: '5', name: 'Design de Sobrancelha', price: 25, duration: 20, pixKey: '', pixQrCode: '' },
 ];
 
 const initialProfessionals: Professional[] = [
-    { id: '1', name: 'Ana Silva', services: ['1', '5'] },
-    { id: '2', name: 'Carlos Souza', services: ['1', '4'] },
-    { id: '3', name: 'Mariana Costa', services: ['2', '3'] },
+    { id: '1', name: 'Ana Silva', services: ['1', '5'], photoUrl: '' },
+    { id: '2', name: 'Carlos Souza', services: ['1', '4'], photoUrl: '' },
+    { id: '3', name: 'Mariana Costa', services: ['2', '3'], photoUrl: '' },
 ];
 
 const initialAvailability: DayAvailability[] = DAYS_OF_WEEK.map((_, index) => ({

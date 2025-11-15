@@ -17,7 +17,6 @@ const Payment: React.FC<PaymentProps> = ({ bookingData, onNext, onBack }) => {
     
     const { service, professional, date, time } = bookingData;
     const paymentValue = service ? service.price * 0.5 : 0;
-    const pixCode = "00020126330014br.gov.bcb.pix0111123456789010212Fake Store0303***5204000053039865802BR5913Fake Store 6009SAO PAULO62070503***6304E2A5";
 
     if (!service || !professional || !date || !time) {
         return <p>Informações do agendamento incompletas. Por favor, volte e tente novamente.</p>;
@@ -72,12 +71,30 @@ const Payment: React.FC<PaymentProps> = ({ bookingData, onNext, onBack }) => {
 
                 {!isPaid ? (
                     <div className="text-center">
-                        <p className="mb-4">Para confirmar seu agendamento, pague o sinal via PIX.</p>
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=PIX_CODE_EXAMPLE" alt="QR Code PIX" className="mx-auto border p-2 rounded-lg" />
-                        <button onClick={() => navigator.clipboard.writeText(pixCode)} className="mt-4 px-4 py-2 bg-slate-200 text-slate-800 rounded-lg w-full">Copiar Código PIX</button>
-                        <button onClick={() => setIsPaid(true)} className="mt-4 w-full px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors">
-                            Já Efetuei o Pagamento
-                        </button>
+                        {service.pixKey || service.pixQrCode ? (
+                            <>
+                                <p className="mb-4">Para confirmar seu agendamento, pague o sinal via PIX.</p>
+                                {service.pixQrCode && (
+                                    <img src={service.pixQrCode} alt="QR Code PIX" className="mx-auto border p-2 rounded-lg max-w-[200px] h-auto bg-white" />
+                                )}
+                                {service.pixKey && (
+                                     <button onClick={() => navigator.clipboard.writeText(service.pixKey!)} className="mt-4 px-4 py-2 bg-slate-200 text-slate-800 rounded-lg w-full text-left truncate">
+                                        <span className="font-semibold">Copiar Chave PIX:</span> {service.pixKey}
+                                     </button>
+                                )}
+                                <button onClick={() => setIsPaid(true)} className="mt-4 w-full px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors">
+                                    Já Efetuei o Pagamento
+                                </button>
+                            </>
+                        ) : (
+                            <div className="text-center text-slate-500 p-4 bg-slate-100 rounded-md">
+                                <p>As informações de pagamento para este serviço não estão disponíveis no momento.</p>
+                                <p>Por favor, prossiga para enviar o agendamento e combine o pagamento com o profissional.</p>
+                                 <button onClick={() => setIsPaid(true)} className="mt-4 w-full px-6 py-3 bg-slate-700 text-white font-semibold rounded-lg shadow-md hover:bg-slate-800 transition-colors">
+                                    Agendar sem Sinal
+                                </button>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <div className="text-center">
