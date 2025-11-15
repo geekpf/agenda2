@@ -1,0 +1,5 @@
+{
+  "name": "Agendamento Pro",
+  "description": "Um aplicativo simples para agendamento de horários para profissionais de beleza e bem-estar, com gestão de serviços, profissionais, horários e pagamentos.",
+  "requestFramePermissions": []
+}
